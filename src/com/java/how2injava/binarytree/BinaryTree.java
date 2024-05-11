@@ -19,192 +19,191 @@ class TreeNode {
 
 }
 
-	
+public class BinaryTree {
 
-	public class BinaryTree {
+	TreeNode root;
 
-		TreeNode root;
+	public BinaryTree() {
 
-		public BinaryTree() {
+		root = null;
 
-			root = null;
+	}
+
+	public void insert(int val) {
+		root = insertRecursive(root, val);
+	}
+
+	private TreeNode insertRecursive(TreeNode root, int val) {
+		if (root == null) {
+			return new TreeNode(val);
+		}
+
+		if (val < root.data) {
+			root.left = insertRecursive(root.left, val);
+		} else if (val > root.data) {
+			root.right = insertRecursive(root.right, val);
+		}
+
+		return root;
+	}
+
+	public void inorderTraversal(TreeNode root) {
+
+		if (root != null) {
+
+			inorderTraversal(root.left);
+
+			System.out.print(root.data + " ");
+
+			inorderTraversal(root.right);
 
 		}
 
-		public void insert(int val) {
-			root = insertRecursive(root, val);
+	}
+
+	public TreeNode search(int val) {
+
+		return searchRecursive(root, val);
+
+	}
+
+	private TreeNode searchRecursive(TreeNode root, int val) {
+
+		if (root == null || root.data == val) {
+
+			return root;
+
 		}
 
-		private TreeNode insertRecursive(TreeNode root, int val) {
-			if (root == null) {
-				return new TreeNode(val);
-			}
+		if (val < root.data) {
 
-			if (val < root.data) {
-				root.left = insertRecursive(root.left, val);
-			} else if (val > root.data) {
-				root.right = insertRecursive(root.right, val);
-			}
+			return searchRecursive(root.left, val);
 
+		} else {
+
+			return searchRecursive(root.right, val);
+
+		}
+
+	}
+
+	public void delete(int key) {
+		root = deleteNode(root, key);
+	}
+
+	private TreeNode deleteNode(TreeNode root, int key) {
+		if (root == null) {
 			return root;
 		}
 
-		public void inorderTraversal(TreeNode root) {
-
-			if (root != null) {
-
-				inorderTraversal(root.left);
-
-				System.out.print(root.data + " ");
-
-				inorderTraversal(root.right);
-
+		if (key < root.data) {
+			root.left = deleteNode(root.left, key);
+		} else if (key > root.data) {
+			root.right = deleteNode(root.right, key);
+		} else {
+			if (root.left == null) {
+				return root.right;
+			} else if (root.right == null) {
+				return root.left;
 			}
 
-		}
-		public TreeNode search(int val) {
+			root.data = minValue(root.right);
 
-			return searchRecursive(root, val);
-
+			root.right = deleteNode(root.right, root.data);
 		}
 
-		private TreeNode searchRecursive(TreeNode root, int val) {
+		return root;
+	}
 
-			if (root == null || root.data == val) {
-
-				return root;
-
-			}
-
-			if (val < root.data) {
-
-				return searchRecursive(root.left, val);
-
-			} else {
-
-				return searchRecursive(root.right, val);
-
-			}
-
+	public int height(TreeNode root) {
+		if (root == null) {
+			return 0;
 		}
 
-		public void delete(int key) {
-			root = deleteNode(root, key);
+		int leftHeight = height(root.left);
+		int rightHeight = height(root.right);
+
+		return 1 + Math.max(leftHeight, rightHeight);
+	}
+
+	private int minValue(TreeNode root) {
+		int minVal = root.data;
+		while (root.left != null) {
+			minVal = root.left.data;
+			root = root.left;
 		}
+		return minVal;
+	}
 
-		private TreeNode deleteNode(TreeNode root, int key) {
-			if (root == null) {
-				return root;
-			}
+	public void preorderTraversal(TreeNode root) {
 
-			if (key < root.data) {
-				root.left = deleteNode(root.left, key);
-			} else if (key > root.data) {
-				root.right = deleteNode(root.right, key);
-			} else {
-				if (root.left == null) {
-					return root.right;
-				} else if (root.right == null) {
-					return root.left;
-				}
+		if (root != null) {
 
-				root.data = minValue(root.right);
+			System.out.print(root.data + " ");
 
-				root.right = deleteNode(root.right, root.data);
-			}
+			preorderTraversal(root.left);
 
-			return root;
-		}
-
-		public int height(TreeNode root) {
-			if (root == null) {
-				return 0;
-			}
-
-			int leftHeight = height(root.left);
-			int rightHeight = height(root.right);
-
-			return 1 + Math.max(leftHeight, rightHeight);
-		}
-
-		private int minValue(TreeNode root) {
-			int minVal = root.data;
-			while (root.left != null) {
-				minVal = root.left.data;
-				root = root.left;
-			}
-			return minVal;
-		}
-
-		public void preorderTraversal(TreeNode root) {
-
-			if (root != null) {
-
-				System.out.print(root.data + " ");
-
-				preorderTraversal(root.left);
-
-				preorderTraversal(root.right);
-
-			}
+			preorderTraversal(root.right);
 
 		}
 
-		public int size(TreeNode root) {
-			if (root == null) {
-				return 0;
-			}
+	}
 
-			return 1 + size(root.left) + size(root.right);
+	public int size(TreeNode root) {
+		if (root == null) {
+			return 0;
 		}
 
-		public void postorderTraversal(TreeNode root) {
+		return 1 + size(root.left) + size(root.right);
+	}
 
-			if (root != null) {
+	public void postorderTraversal(TreeNode root) {
 
-				postorderTraversal(root.left);
+		if (root != null) {
 
-				postorderTraversal(root.right);
+			postorderTraversal(root.left);
 
-				System.out.print(root.data + " ");
+			postorderTraversal(root.right);
+
+			System.out.print(root.data + " ");
+
+		}
+
+	}
+
+	public void levelOrderTraversal(TreeNode root) {
+
+		if (root == null) {
+
+			return;
+
+		}
+
+		Queue<TreeNode> queue = new LinkedList<>();
+
+		queue.add(root);
+
+		while (!queue.isEmpty()) {
+
+			TreeNode current = queue.poll();
+
+			System.out.print(current.data + " ");
+
+			if (current.left != null) {
+
+				queue.add(current.left);
+
+			}
+
+			if (current.right != null) {
+
+				queue.add(current.right);
 
 			}
 
 		}
 
-		public void levelOrderTraversal(TreeNode root) {
-
-			if (root == null) {
-
-				return;
-
-			}
-
-			Queue<TreeNode> queue = new LinkedList<>();
-
-			queue.add(root);
-
-			while (!queue.isEmpty()) {
-
-				TreeNode current = queue.poll();
-
-				System.out.print(current.data + " ");
-
-				if (current.left != null) {
-
-					queue.add(current.left);
-
-				}
-
-				if (current.right != null) {
-
-					queue.add(current.right);
-
-				}
-
-			}
-
-		}
+	}
 
 	public static void main(String[] args) {
 
@@ -217,13 +216,12 @@ class TreeNode {
 		tree.insert(70);
 
 		tree.insert(20);
-		
+
 		tree.insert(10);
 
 		tree.insert(40);
-		
-		tree.insert(45);
 
+		tree.insert(45);
 
 		int size = tree.size(tree.root);
 
@@ -238,19 +236,19 @@ class TreeNode {
 		tree.inorderTraversal(tree.root);
 
 		System.out.println("");
-		
+
 		System.out.println("Pre traversal of the binary tree:");
 
 		tree.preorderTraversal(tree.root);
-		
+
 		System.out.println("");
-		
+
 		tree.search(70);
 
 		System.out.println("Post traversal of the binary tree:");
 
 		tree.postorderTraversal(tree.root);
-		
+
 		System.out.println("");
 
 		System.out.println("Level order traversal of the binary tree:");
@@ -260,7 +258,7 @@ class TreeNode {
 		tree.delete(10);
 
 		System.out.println("");
-		
+
 		System.out.println("Inorder traversal of the binary tree after deleting element 10:");
 
 		tree.inorderTraversal(tree.root);
